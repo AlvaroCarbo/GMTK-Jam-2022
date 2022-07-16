@@ -14,6 +14,8 @@ public class EntityController : MonoBehaviour
         var position = transform.position;
     }
 
+    public CharacterStats GetStats() { return stats; }
+    public bool GetSelected() { return selected; }
     public void Select() => selected = true;
     
     public void Release() => selected = false;

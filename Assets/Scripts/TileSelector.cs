@@ -72,13 +72,14 @@ public class TileSelector : MonoBehaviour
         // Vector2 playerPosition = walkableTilemap.GetCellCenterWorld(gridPosition);
         Vector2 playerPosition = new Vector2(gridPosition.x, gridPosition.y);
         var tempSelected = new Vector2Int(selectedTilePosition.x, selectedTilePosition.y);
-
+        //Check if player is already selected and try to move there
+        if (player.GetSelected() && playerPosition != tempSelected) { /*player.gameObject.GetComponent<Transform>().position = tempSelected;*/ }
         Debug.Log(playerPosition);
         Debug.Log(tempSelected);
         if (playerPosition == tempSelected)
         {
             player.Select();
-            ShowTileRadius(4);
+            ShowTileRadius(player.GetStats().movePoints);
         }
         else
         {
