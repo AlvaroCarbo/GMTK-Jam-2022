@@ -5,20 +5,34 @@ using UnityEngine.Tilemaps;
 
 public class TileSelector : MonoBehaviour
 {
+    public static TileSelector Instance;
+
     [SerializeField] private Tilemap walkableTilemap;
     [SerializeField] private Tilemap selectionTilemap;
     [SerializeField] private Tilemap stepsTilemap;
 
     [SerializeField] private TileBase selectedTile;
-    
+    [SerializeField] private TileBase walkableTile;
+
     [SerializeField] private Vector3Int selectedTilePosition;
     [SerializeField] private Vector3Int lastSelectedTile;
+
+    [SerializeField] private EntityController player;
 
     [SerializeField] private InputHandler inputHandler;
     private Camera _camera;
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         _camera = Camera.main;
     }
 
@@ -26,9 +40,9 @@ public class TileSelector : MonoBehaviour
     {
         inputHandler.OnMoveEvent += GetTilePosition;
         inputHandler.OnClickEvent += SelectTile;
-        
-        Debug.Log(walkableTilemap.cellBounds);
-        Debug.Log(walkableTilemap.cellBounds.size);
+
+        // Debug.Log(walkableTilemap.cellBounds);
+        // Debug.Log(walkableTilemap.cellBounds.size);
     }
 
     private void GetTilePosition(Vector2 pos)
@@ -40,27 +54,43 @@ public class TileSelector : MonoBehaviour
         selectionTilemap.SetTile(lastSelectedTile, null);
 
         lastSelectedTile = selectedTilePosition;
-        
+
         // tilemap.SetTile(selectedTilePosition, selectedTile);
         if (walkableTilemap.HasTile(selectedTilePosition))
         {
             selectionTilemap.SetTile(selectedTilePosition, selectedTile);
         }
-        
     }
 
     private void SelectTile()
     {
-        if (true)
+        // Check if can show steps
+
+        // Debug.Log("Selected tile: " + selectedTilePosition);
+
+        var gridPosition = walkableTilemap.WorldToCell(player.GetPosition());
+        // Vector2 playerPosition = walkableTilemap.GetCellCenterWorld(gridPosition);
+        Vector2 playerPosition = new Vector2(gridPosition.x, gridPosition.y);
+        var tempSelected = new Vector2Int(selectedTilePosition.x, selectedTilePosition.y);
+
+        Debug.Log(playerPosition);
+        Debug.Log(tempSelected);
+        if (playerPosition == tempSelected)
         {
-            ShowTileRadius(2);
+            player.Select();
+            ShowTileRadius(4);
+        }
+        else
+        {
+            DisableTileRadius();
+            player.Release();
         }
     }
-    
+
     private void ShowTileRadius(int tileSteps)
     {
         // check for tiles around where there number between tiles and the distance to the selected tile is less than the number of tiles
-        
+
         for (int x = -tileSteps; x <= tileSteps; x++)
         {
             for (int y = -tileSteps; y <= tileSteps; y++)
@@ -69,11 +99,13 @@ public class TileSelector : MonoBehaviour
                 Vector3Int tilePosition = new Vector3Int(selectedTilePosition.x + x, selectedTilePosition.y + y, 0);
                 if (walkableTilemap.HasTile(tilePosition))
                 {
-                    stepsTilemap.SetTile(tilePosition, selectedTile);
+                    stepsTilemap.SetTile(tilePosition, walkableTile);
                 }
             }
         }
     }
+
+    private void DisableTileRadius() => stepsTilemap.ClearAllTiles();
 
     private void OnDestroy()
     {

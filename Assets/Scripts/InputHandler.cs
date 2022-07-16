@@ -23,7 +23,7 @@ public class InputHandler : MonoBehaviour
     {
         if (context.performed)
         {
-            Debug.Log("Select"  + _mousePos);
+            // Debug.Log("Select"  + _mousePos);
             OnClickEvent?.Invoke();
         }
     }
