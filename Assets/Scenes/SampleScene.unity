@@ -250,7 +250,7 @@ MonoBehaviour:
   walkableTile: {fileID: 11400000, guid: 80fadb983f9d7fb428270ed1136f6cdd, type: 2}
   selectedTilePosition: {x: 0, y: 0, z: 0}
   lastSelectedTile: {x: 0, y: 0, z: 0}
-  player: {fileID: 155501374}
+  player: {fileID: 0}
   inputHandler: {fileID: 131903811}
 --- !u!1 &131942370
 GameObject:
@@ -363,7 +363,6 @@ GameObject:
   m_Component:
   - component: {fileID: 155501373}
   - component: {fileID: 155501372}
-  - component: {fileID: 155501374}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Player
@@ -431,28 +430,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 155501371}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 835317722}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &155501374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155501371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b06ecdbb6dc4e38a1afc277db8a9412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _grid: {fileID: 0}
-  selected: 0
-  stats: {fileID: 0}
 --- !u!1 &178718846
 GameObject:
   m_ObjectHideFlags: 0
@@ -33965,6 +33949,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 835317722}
+  - component: {fileID: 835317723}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -33988,6 +33973,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &835317723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835317721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b06ecdbb6dc4e38a1afc277db8a9412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _grid: {fileID: 0}
+  selected: 0
+  stats: {fileID: 0}
 --- !u!1 &1198417788
 GameObject:
   m_ObjectHideFlags: 0
