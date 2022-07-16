@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b9fcce98f7ceea4c8cd3bfb37db19f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursorPos: {x: 0, y: 0}
 --- !u!114 &131903812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +195,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9904240f-4321-45ce-aee6-c9cc7a5319ae
     m_ActionName: Gameplay/MoveCursor[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 131903811}
+        m_TargetAssemblyTypeName: InputHandler, Assembly-CSharp
+        m_MethodName: OnSelect
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 74d4e294-a7c9-4fec-b5a5-29141c312326
+    m_ActionName: Gameplay/Select[/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
@@ -228,8 +243,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7879a1e67afbf40a1d1988febced12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilemap: {fileID: 178718849}
+  walkableTilemap: {fileID: 178718849}
+  selectionTilemap: {fileID: 1198417791}
   selectedTile: {fileID: 11400000, guid: 1796d7686f9907c47a53a2b918dce788, type: 2}
+  lastSelectedTile: {x: 0, y: 0, z: 0}
   inputHandler: {fileID: 131903811}
 --- !u!1 &155501371
 GameObject:
@@ -327,7 +344,7 @@ GameObject:
   - component: {fileID: 178718849}
   - component: {fileID: 178718848}
   m_Layer: 0
-  m_Name: Tilemap
+  m_Name: WalkableTilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2918,7 +2935,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 6.23
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3007,7 +3024,7 @@ GameObject:
   - component: {fileID: 1198417791}
   - component: {fileID: 1198417790}
   m_Layer: 0
-  m_Name: Tilemap (1)
+  m_Name: SelectTilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3021,7 +3038,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1198417788}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

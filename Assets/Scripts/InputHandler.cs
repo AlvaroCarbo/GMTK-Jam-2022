@@ -5,10 +5,26 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
-    public delegate void OnMoveMouse(Vector2 pos);
+    private Vector2 _mousePos;
+    
+    public delegate void OnMove(Vector2 pos);
+    public event OnMove OnMoveEvent;
 
-    public event OnMoveMouse OnMoveMouseEvent;
-
-    public void OnMoveCursor(InputAction.CallbackContext context) =>
-        OnMoveMouseEvent?.Invoke(context.ReadValue<Vector2>());
+    public delegate void OnClick();
+    public event OnClick OnClickEvent;
+    
+    public void OnMoveCursor(InputAction.CallbackContext context)
+    {
+        _mousePos = context.ReadValue<Vector2>();
+        OnMoveEvent?.Invoke(_mousePos);
+    }
+    
+    public void OnSelect(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Debug.Log("Select"  + _mousePos);
+            OnClickEvent?.Invoke();
+        }
+    }
 }
