@@ -18,6 +18,8 @@ public class EntityController : MonoBehaviour
     [SerializeField] private Sprite selectedSprite;
     [SerializeField] private Sprite unselectedSprite;
 
+    [SerializeField] private Animator animator;
+
     private void Awake()
     {
         ResetHealthPoints();
@@ -25,23 +27,26 @@ public class EntityController : MonoBehaviour
         hpBar.GetComponent<Slider>().value = stats.healthPoints;
         ResetMovePoints();
         Release();
+
+        animator = GetComponentInChildren<Animator>();
     }
 
     public CharacterStats GetStats()
     {
         return stats;
     }
-    
+
     public void ResetMovePoints()
     {
         currentMovePoints = stats.movePoints;
     }
+
     public void ResetHealthPoints()
     {
         hpBar.GetComponent<Slider>().value = stats.healthPoints;
         currentHealthPoints = stats.healthPoints;
     }
-    
+
     public void DecreaseHealth(int healthToDecrease)
     {
         currentHealthPoints -= healthToDecrease;
@@ -49,12 +54,15 @@ public class EntityController : MonoBehaviour
         checkIfDead(currentHealthPoints);
     }
 
-    public void checkIfDead(int hp) 
+    public void checkIfDead(int hp)
     {
-        if (hp <= 0) { //Really dead
-            this.gameObject.SetActive(false);            
+        if (hp <= 0)
+        {
+            //Really dead
+            this.gameObject.SetActive(false);
         }
     }
+
     public bool GetSelected()
     {
         return selected;
@@ -99,14 +107,16 @@ public class EntityController : MonoBehaviour
 
     public void Hover()
     {
-        spriteRenderer.sprite = selectedSprite;
+        animator.SetBool("Outline", true);
+        // spriteRenderer.sprite = selectedSprite;
     }
 
     public void ResetHover()
     {
         if (!selected)
         {
-            spriteRenderer.sprite = unselectedSprite;
+            animator.SetBool("Outline", false);
+            // spriteRenderer.sprite = unselectedSprite;
         }
     }
 }
