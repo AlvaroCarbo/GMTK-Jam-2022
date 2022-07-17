@@ -98,7 +98,7 @@ public class TileSelector : MonoBehaviour
     {
         foreach (var movePos in playerMovePosition.Where(movePos => target == movePos))
         {
-            player.CellDistance(target);
+            player.WalkedCellDistance(target);
             player.SetWorldPosition(walkableTilemap.CellToWorld(target));
             player.SetCell(target);
         }
