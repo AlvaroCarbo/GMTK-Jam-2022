@@ -247,6 +247,7 @@ MonoBehaviour:
   selectionTilemap: {fileID: 1198417791}
   stepsTilemap: {fileID: 2145857380}
   selectedTile: {fileID: 11400000, guid: 3f751ae2c299dbc4487195fb82ddfa05, type: 2}
+  walkableSelectedTile: {fileID: 11400000, guid: c16480e12cc6a504c9029ae73067cc1e, type: 2}
   walkableTile: {fileID: 11400000, guid: 80fadb983f9d7fb428270ed1136f6cdd, type: 2}
   selectedTilePosition: {x: 0, y: 0, z: 0}
   lastSelectedTile: {x: 0, y: 0, z: 0}
@@ -33987,7 +33988,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _grid: {fileID: 0}
   selected: 0
-  stats: {fileID: 0}
+  stats: {fileID: 11400000, guid: 4832cb3397ce88c4e853a05170a8505d, type: 2}
+  currentMovePoints: 0
 --- !u!1 &1198417788
 GameObject:
   m_ObjectHideFlags: 0

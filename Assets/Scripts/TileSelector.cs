@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
@@ -12,12 +14,14 @@ public class TileSelector : MonoBehaviour
     [SerializeField] private Tilemap stepsTilemap;
 
     [SerializeField] private TileBase selectedTile;
+    [SerializeField] private TileBase walkableSelectedTile;
     [SerializeField] private TileBase walkableTile;
 
     [SerializeField] private Vector3Int selectedTilePosition;
     [SerializeField] private Vector3Int lastSelectedTile;
 
     [SerializeField] private EntityController player;
+    [SerializeField] private List<Vector3> playerMovePosition;
 
     [SerializeField] private InputHandler inputHandler;
     private Camera _camera;
@@ -58,7 +62,8 @@ public class TileSelector : MonoBehaviour
         // tilemap.SetTile(selectedTilePosition, selectedTile);
         if (walkableTilemap.HasTile(selectedTilePosition))
         {
-            selectionTilemap.SetTile(selectedTilePosition, selectedTile);
+            selectionTilemap.SetTile(selectedTilePosition,
+                stepsTilemap.HasTile(selectedTilePosition) ? walkableSelectedTile : selectedTile);
         }
     }
 
@@ -70,21 +75,27 @@ public class TileSelector : MonoBehaviour
 
         var gridPosition = walkableTilemap.WorldToCell(player.GetPosition());
         // Vector2 playerPosition = walkableTilemap.GetCellCenterWorld(gridPosition);
-        Vector2 playerPosition = new Vector2(gridPosition.x, gridPosition.y);
+        var playerPosition = new Vector2(gridPosition.x, gridPosition.y);
         var tempSelected = new Vector2Int(selectedTilePosition.x, selectedTilePosition.y);
-        
+
         Debug.Log(playerPosition);
         Debug.Log(tempSelected);
         if (playerPosition == tempSelected)
         {
             player.Select();
-            ShowTileRadius(player.GetStats().movePoints);
+            DisableTileRadius();
+            ShowTileRadius(player.currentMovePoints);
         }
         else
         {
             //Check if player is already selected and try to move there 
-            //TO-DO: Evitar ir más lejos del rango
-            if (player.GetSelected() && playerPosition != tempSelected) { var target = tempSelected; MoveToPoint(new Vector3Int(target.x, target.y)); }
+
+            if (player.GetSelected() && playerPosition != tempSelected)
+            {
+                // ShowTileRadius(player.currentMovePoints);
+                MoveToPoint(new Vector3Int(tempSelected.x, tempSelected.y));
+            }
+
             DisableTileRadius();
             player.Release();
         }
@@ -92,8 +103,12 @@ public class TileSelector : MonoBehaviour
 
     private void MoveToPoint(Vector3Int target)
     {
-        player.SetPosition(walkableTilemap.CellToWorld(target));
+        foreach (var movePos in playerMovePosition.Where(movePos => target == movePos))
+        {
+            player.SetPosition(walkableTilemap.CellToWorld(target));
+        }
     }
+
     private void ShowTileRadius(int tileSteps)
     {
         // check for tiles around where there number between tiles and the distance to the selected tile is less than the number of tiles
@@ -107,12 +122,17 @@ public class TileSelector : MonoBehaviour
                 if (walkableTilemap.HasTile(tilePosition))
                 {
                     stepsTilemap.SetTile(tilePosition, walkableTile);
+                    playerMovePosition.Add(tilePosition);
                 }
             }
         }
     }
 
-    private void DisableTileRadius() => stepsTilemap.ClearAllTiles();
+    private void DisableTileRadius()
+    {
+        stepsTilemap.ClearAllTiles();
+        playerMovePosition.Clear();
+    }
 
     private void OnDestroy()
     {

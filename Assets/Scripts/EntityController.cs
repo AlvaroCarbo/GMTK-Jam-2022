@@ -8,10 +8,13 @@ public class EntityController : MonoBehaviour
     [SerializeField] private bool selected;
 
     [SerializeField] private CharacterStats stats;
+    
+    public int currentMovePoints;
 
     private void Start()
     {
         var position = transform.position;
+        currentMovePoints = stats.movePoints;
     }
 
     public CharacterStats GetStats() { return stats; }
