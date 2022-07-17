@@ -58,11 +58,19 @@ public class LevelStateMachine : MonoBehaviour
         }
         else
         {
+           
             enemy.GetComponentInChildren<Animator>().SetTrigger("Attack");
-            FinishTurn();
+            StartCoroutine(ApplyDMGEnemy());
+            
         }
     }
-
+    public IEnumerator ApplyDMGEnemy() 
+    {
+        yield return new WaitForSeconds(2f);
+        actualTurn++;
+        player.GetComponent<EntityController>().DecreaseHealth(totalAttack / 2);
+        State = GameState.ChangeEnemyTurnToPlayerTurn;
+    }
     public void AddAttackToStack(int value)
     {
         totalAttack += value;
@@ -169,25 +177,22 @@ public class LevelStateMachine : MonoBehaviour
 
     public void FinishTurn()
     {
-        if (!canFinishTurn && !isPlayerTurn) return;
-        if (isPlayerTurn)
-        {
-            State = GameState.EnemyMoveTurn;
-            DisableAttackGUI();
-            canFinishTurn = false;
-        }
-        else
-        {
-            State = GameState.PlayerMoveTurn;
-            DisableAttackGUI();
-            actualTurn++;
-            turnText.text = "TURN " + actualTurn;
-            turnTextBG.text = "TURN " + actualTurn;
-        }
+        State = GameState.PlayerMoveTurn;
+        DisableAttackGUI();
+        turnText.text = "TURN " + actualTurn;
+        turnTextBG.text = "TURN " + actualTurn;
 
-        isPlayerTurn = !isPlayerTurn;
     }
+    public void PassTurn() { 
 
+        if (isPlayerTurn) { 
+        State = GameState.EnemyMoveTurn;
+        DisableAttackGUI();
+        player.GetComponent<EntityController>().ResetMovePoints();
+        canFinishTurn = false;
+        isPlayerTurn = !isPlayerTurn;
+        }
+    }
     public void PlayerDiceRoll()
     {
         for (int i = 0; i < dicesOnUse.Length; i++)
@@ -207,6 +212,8 @@ public class LevelStateMachine : MonoBehaviour
 
     public void EnemyTurnMove()
     {
+        enemy.GetComponent<PathfinderTest>().FindPath();
+        
         //If near enough player will try to fight him, if not then moves to random place and pass turn
     }
 
@@ -236,7 +243,7 @@ public class LevelStateMachine : MonoBehaviour
                 PlayerDiceRoll();
                 break;
             case GameState.ChangePlayerTurnToEnemyTurn:
-                FinishTurn();
+                PassTurn();
                 break;
             case GameState.EnemyMoveTurn:
                 EnemyTurnMove();

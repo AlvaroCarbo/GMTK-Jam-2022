@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80dc2d8818ca48d88b0505b7da59c091, type: 3}
-  m_Name: Character_hero
+  m_Name: Enemy_01
   m_EditorClassIdentifier: 
-  movePoints: 6
-  healthPoints: 50
+  movePoints: 3
+  healthPoints: 25

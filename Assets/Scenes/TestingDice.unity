@@ -42676,7 +42676,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selected: 0
-  stats: {fileID: 11400000, guid: 2ffc06f144e0d2049b38918841e67de8, type: 2}
+  stats: {fileID: 11400000, guid: 494ea77834699a94ab2eb16857f4ec53, type: 2}
   hpBar: {fileID: 1779824033}
   currentMovePoints: 0
   currentHealthPoints: 0
@@ -42854,6 +42854,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 131903815}
+    - target: {fileID: 7358621565248614893, guid: 98a8eaa71c21bce42abb7fc28d9314e7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PassTurn
+      objectReference: {fileID: 0}
     - target: {fileID: 7358621565469300552, guid: 98a8eaa71c21bce42abb7fc28d9314e7, type: 3}
       propertyPath: m_Pivot.x
       value: 0
