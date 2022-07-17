@@ -6,8 +6,11 @@ public class DiceRoller : MonoBehaviour
 {
     public List<Sprite> DiceFaces = new List<Sprite> { };
     public int value;
+    public bool hasRolled, ableToRoll;
     private void Awake()
     {
+        hasRolled = false;
+        ableToRoll = true;
         value = 0;
     }
     // Start is called before the first frame update
@@ -16,6 +19,7 @@ public class DiceRoller : MonoBehaviour
         
     }
     public void onRollClicked() {
+        if (!ableToRoll) return;
         this.gameObject.GetComponent<Animator>().enabled = true;
         onDiceRoll(Random.Range(1, 7));
     }
@@ -30,6 +34,8 @@ public class DiceRoller : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         this.gameObject.GetComponent<SpriteRenderer>().sprite = DiceFaces[value - 1];
+        hasRolled = true;
+        ableToRoll = false;
         this.gameObject.GetComponent<Animator>().enabled = false;
     }
     // Update is called once per frame

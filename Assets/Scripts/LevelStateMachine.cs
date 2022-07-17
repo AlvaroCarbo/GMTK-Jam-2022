@@ -7,8 +7,9 @@ public class LevelStateMachine : MonoBehaviour
 {
     public int actualTurn;
     public GameObject player, enemy;
-    public TextMeshProUGUI turnText, turnTextBG;
+    public TextMeshProUGUI turnText, turnTextBG, dmgPlayerText, dmgEnemyText;
     public GameObject diceHolderPlayer, diceHolderEnemy;
+    public DiceRoller[] dicesOnUse;
     public Sprite spriteDefaultDice;
     public SpriteRenderer[] spriteRendererDices;
     public bool isPlayerTurn = true;
@@ -31,9 +32,17 @@ public class LevelStateMachine : MonoBehaviour
         actualTurn = 1;
         isPlayerTurn = true;
     }
-    public void AddAttackToStack() 
+    public void AddAttackToStack(int value) 
     {
-    
+        totalAttack += value;
+        if (isPlayerTurn)
+        {
+            dmgPlayerText.text = "Your Attack: " + totalAttack; 
+        }
+        else 
+        {
+            dmgEnemyText.text = "Enemy Attack: " + totalAttack;
+        }
     }
 
     public void ResetAttackValue()
@@ -62,8 +71,11 @@ public class LevelStateMachine : MonoBehaviour
         {
             diceHolderPlayer.SetActive(false);
             spriteRendererDices = diceHolderPlayer.FindComponentsInChildrenWithTag<SpriteRenderer>("Dice");
+            dmgPlayerText.text = "Your Attack: ";
+            totalAttack = 0;
             for (int i = 0; i < spriteRendererDices.Length; i++)
             {
+                dicesOnUse[i].ableToRoll = true;
                 spriteRendererDices[i].sprite = spriteDefaultDice;
             }
         }
@@ -71,16 +83,30 @@ public class LevelStateMachine : MonoBehaviour
         {
             diceHolderEnemy.SetActive(false);
             spriteRendererDices = diceHolderEnemy.FindComponentsInChildrenWithTag<SpriteRenderer>("Dice");
+            dmgEnemyText.text = "Enemy Attack: ";
+            totalAttack = 0;
             for (int i = 0; i < spriteRendererDices.Length; i++)
             {
+                dicesOnUse[i].ableToRoll = true;
                 spriteRendererDices[i].sprite = spriteDefaultDice;
             }
         }
     }
-
+    public void FindDices()
+    {
+        if (isPlayerTurn) { dicesOnUse = diceHolderPlayer.FindComponentsInChildrenWithTag<DiceRoller>("Dice"); }
+        else { dicesOnUse = diceHolderEnemy.FindComponentsInChildrenWithTag<DiceRoller>("Dice"); }
+    }
     public void EnemyDiceRoll() 
     {
-    
+        for (int i = 0; i < dicesOnUse.Length; i++)
+        {
+            if (dicesOnUse[i].value != 0 && dicesOnUse[i].hasRolled)
+            {
+                AddAttackToStack(dicesOnUse[i].value);
+                dicesOnUse[i].hasRolled = false;
+            }
+        }
     }
     public void FinishTurn() 
     {
@@ -88,12 +114,19 @@ public class LevelStateMachine : MonoBehaviour
         actualTurn++;
         turnText.text = "TURN " + actualTurn;
         turnTextBG.text = "TURN " + actualTurn;
+        if (isPlayerTurn) { State = GameState.EnemyMoveTurn; }
+        else { State = GameState.PlayerMoveTurn; }
         isPlayerTurn = !isPlayerTurn;
-        State = GameState.EnemyMoveTurn;
+        
     }
     public void PlayerDiceRoll()
-    { 
-    
+    {
+        for (int i = 0; i < dicesOnUse.Length; i++) {
+            if (dicesOnUse[i].value != 0 && dicesOnUse[i].hasRolled) {
+                AddAttackToStack(dicesOnUse[i].value);
+                dicesOnUse[i].hasRolled = false;
+            }
+        }
     }
 
     public void PlayerTurnMove() 
@@ -126,6 +159,8 @@ public class LevelStateMachine : MonoBehaviour
                 break;
             case GameState.ChangePlayerMoveToAttackTurn:
                 EnableAttackGUI();
+                FindDices();
+                State = GameState.PlayerAttackTurn;
                 break;
             case GameState.PlayerAttackTurn:
                 PlayerDiceRoll();
@@ -138,6 +173,8 @@ public class LevelStateMachine : MonoBehaviour
                 break;
             case GameState.ChangeEnemyMoveToAttackTurn:
                 EnableAttackGUI();
+                FindDices();
+                State = GameState.EnemyAttackTurn;
                 break;
             case GameState.EnemyAttackTurn:
                 EnemyDiceRoll();
