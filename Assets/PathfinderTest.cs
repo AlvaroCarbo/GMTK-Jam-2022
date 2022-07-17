@@ -10,40 +10,46 @@ using UnityEngine.WSA;
 public class PathfinderTest : MonoBehaviour
 {
     private EntityController _enemy;
-    
-    [Header("Target to find")]
-    [SerializeField] private EntityController player;
-    
-    [Header("Other enemies")]
-    [SerializeField] private List<EntityController> enemies;
-    
-    [Header("Tilemap to find path on")]
-    [SerializeField] private Tilemap walkableTilemap;
-    
-    [Header("Enemy positions to move")]
-    [SerializeField] private List<Vector3> enemyMovement;
-    
-    [Header("Player inside enemy move range")]
-    [SerializeField] private List<Vector3> playerInMovePosition;
-    
-    [Header("Other enemies inside enemy move range")]
-    [SerializeField] private List<Vector3> enemiesInMovePosition;
+
+    [Header("Target to find")] [SerializeField]
+    private EntityController player;
+
+    [Header("Other enemies")] [SerializeField]
+    private List<EntityController> enemies;
+
+    [Header("Tilemap to find path on")] [SerializeField]
+    private Tilemap walkableTilemap;
+
+    [Header("Enemy positions to move")] [SerializeField]
+    private List<Vector3> enemyMovement;
+
+    [Header("Player inside enemy move range")] [SerializeField]
+    private List<Vector3> playerInMovePosition;
+
+    [Header("Other enemies inside enemy move range")] [SerializeField]
+    private List<Vector3> enemiesInMovePosition;
 
     private void Awake()
     {
         _enemy = GetComponent<EntityController>();
-        
     }
-    
+
     private void Start()
     {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy").Select(e => e.GetComponent<EntityController>()).Where(e => e != _enemy).ToList();
+        enemies = GameObject.FindGameObjectsWithTag("Enemy").Select(e => e.GetComponent<EntityController>())
+            .Where(e => e != _enemy).ToList();
+    }
+
+    public void FindPath()
+    {
+        enemies = GameObject.FindGameObjectsWithTag("Enemy").Select(e => e.GetComponent<EntityController>())
+            .Where(e => e != _enemy).ToList();
 
         ShowEnemyTileRadius(_enemy.currentMovePoints);
-        
+
         MoveToPoint(player.GetCell());
     }
-    
+
     private void ShowEnemyTileRadius(int tileSteps)
     {
         // check for tiles around where there number between tiles and the distance to the selected tile is less than the number of tiles
@@ -64,7 +70,7 @@ public class PathfinderTest : MonoBehaviour
                     enemyMovement.Remove(tilePosition);
                     playerInMovePosition.Add(tilePosition);
                 }
-                
+
                 if (enemies.Any(e => e.GetCell() == tilePosition))
                 {
                     enemyMovement.Remove(tilePosition);
@@ -73,7 +79,7 @@ public class PathfinderTest : MonoBehaviour
             }
         }
     }
-    
+
     private void MoveToPoint(Vector3Int target)
     {
         foreach (var movePos in enemyMovement.Where(movePos => target == movePos))
@@ -92,8 +98,16 @@ public class PathfinderTest : MonoBehaviour
             _enemy.WalkedCellDistance(cellToGo);
             _enemy.SetWorldPosition(walkableTilemap.CellToWorld(cellToGo));
             _enemy.SetCell(cellToGo);
-            // Attack to enemy
+            
+            if (LevelStateMachine.Instance != null)
+            {
+                if (LevelStateMachine.Instance.State == LevelStateMachine.GameState.EnemyMoveTurn)
+                {
+                    LevelStateMachine.Instance.State = LevelStateMachine.GameState.ChangeEnemyMoveToAttackTurn;
+
+                    // LevelStateMachine.Instance.enemySelected = enemies.First(enemy => enemy.GetCell() == target);
+                }
+            }
         }
-        
     }
 }
