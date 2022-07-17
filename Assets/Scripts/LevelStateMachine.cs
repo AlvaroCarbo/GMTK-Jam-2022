@@ -12,7 +12,7 @@ public class LevelStateMachine : MonoBehaviour
     public DiceRoller[] dicesOnUse;
     public Sprite spriteDefaultDice;
     public SpriteRenderer[] spriteRendererDices;
-    public bool isPlayerTurn = true;
+    public bool isPlayerTurn = true, canFinishTurn;
     public int totalAttack;
     public GameState State = GameState.PlayerMoveTurn;
 
@@ -30,7 +30,23 @@ public class LevelStateMachine : MonoBehaviour
     private void Awake()
     {
         actualTurn = 1;
+        canFinishTurn = true;
         isPlayerTurn = true;
+    }
+
+    public void OnAttackMade() 
+    {
+        if (isPlayerTurn)
+        {
+            DisableAttackGUI();
+            player.GetComponentInChildren<Animator>().SetTrigger("Attack");
+        }
+        else 
+        {
+            
+            enemy.GetComponentInChildren<Animator>().SetTrigger("Attack");
+            FinishTurn();
+        }
     }
     public void AddAttackToStack(int value) 
     {
@@ -41,7 +57,7 @@ public class LevelStateMachine : MonoBehaviour
         }
         else 
         {
-            dmgEnemyText.text = "Enemy Attack: " + totalAttack;
+            dmgEnemyText.text = "Enemy Attack: " + totalAttack/2;
         }
     }
 
@@ -75,7 +91,7 @@ public class LevelStateMachine : MonoBehaviour
             totalAttack = 0;
             for (int i = 0; i < spriteRendererDices.Length; i++)
             {
-                dicesOnUse[i].ableToRoll = true;
+                if (dicesOnUse.Length != 0) { dicesOnUse[i].ableToRoll = true; }
                 spriteRendererDices[i].sprite = spriteDefaultDice;
             }
         }
@@ -87,7 +103,7 @@ public class LevelStateMachine : MonoBehaviour
             totalAttack = 0;
             for (int i = 0; i < spriteRendererDices.Length; i++)
             {
-                dicesOnUse[i].ableToRoll = true;
+                if (dicesOnUse.Length != 0) { dicesOnUse[i].ableToRoll = true; }
                 spriteRendererDices[i].sprite = spriteDefaultDice;
             }
         }
@@ -101,21 +117,29 @@ public class LevelStateMachine : MonoBehaviour
     {
         for (int i = 0; i < dicesOnUse.Length; i++)
         {
+            dicesOnUse[i].onRollClicked();
+        }
+        StartCoroutine(CountEnemyDmg());
+    }
+    public IEnumerator CountEnemyDmg() 
+    {
+        yield return new WaitForSeconds(1f);
+        for (int i = 0; i < dicesOnUse.Length; i++)
+        {
             if (dicesOnUse[i].value != 0 && dicesOnUse[i].hasRolled)
             {
                 AddAttackToStack(dicesOnUse[i].value);
                 dicesOnUse[i].hasRolled = false;
             }
         }
+        //Need stop doing that once done
+        OnAttackMade();
     }
     public void FinishTurn() 
     {
-        DisableAttackGUI();
-        actualTurn++;
-        turnText.text = "TURN " + actualTurn;
-        turnTextBG.text = "TURN " + actualTurn;
-        if (isPlayerTurn) { State = GameState.EnemyMoveTurn; }
-        else { State = GameState.PlayerMoveTurn; }
+        if (!canFinishTurn && !isPlayerTurn) return;
+        if (isPlayerTurn) { State = GameState.EnemyMoveTurn; DisableAttackGUI(); canFinishTurn = false; }
+        else { State = GameState.PlayerMoveTurn; DisableAttackGUI(); actualTurn++; turnText.text = "TURN " + actualTurn; turnTextBG.text = "TURN " + actualTurn; }
         isPlayerTurn = !isPlayerTurn;
         
     }
@@ -130,13 +154,15 @@ public class LevelStateMachine : MonoBehaviour
     }
 
     public void PlayerTurnMove() 
-    { 
-    
+    {
+        canFinishTurn = true;
     }
 
     public void EnemyTurnMove() 
     {
-    
+        //If near enough player will try to fight him, if not then moves to random place and pass turn
+
+
     }
     public void FinishLevel() 
     { 

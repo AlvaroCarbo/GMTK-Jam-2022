@@ -250,6 +250,7 @@ MonoBehaviour:
   selectedTile: {fileID: 11400000, guid: 3f751ae2c299dbc4487195fb82ddfa05, type: 2}
   walkableSelectedTile: {fileID: 11400000, guid: c16480e12cc6a504c9029ae73067cc1e, type: 2}
   walkableTile: {fileID: 11400000, guid: 80fadb983f9d7fb428270ed1136f6cdd, type: 2}
+  enemyWalkableTile: {fileID: 11400000, guid: 2375fa8f26532f0479293f4fc9d3c1c1, type: 2}
   occupiedTile: {fileID: 11400000, guid: 8a1651a285707a14d99083ff2f63235c, type: 2}
   selectedTilePosition: {x: 0, y: 0, z: 0}
   lastSelectedTile: {x: 0, y: 0, z: 0}
@@ -257,8 +258,9 @@ MonoBehaviour:
   enemiesInMovePosition: []
   player: {fileID: 835317723}
   enemies: []
-  mouseOver: {fileID: 0}
+  mouseHover: {fileID: 0}
   mouseOverText: {fileID: 1966248625}
+  selected: {fileID: 0}
   inputHandler: {fileID: 131903811}
 --- !u!114 &131903815
 MonoBehaviour:
@@ -285,6 +287,7 @@ MonoBehaviour:
   spriteDefaultDice: {fileID: 673654459, guid: 78c65a82390c059439c942375e0caa95, type: 3}
   spriteRendererDices: []
   isPlayerTurn: 0
+  canFinishTurn: 0
   totalAttack: 0
   State: 0
 --- !u!1 &155501371
@@ -42369,7 +42372,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 835317721}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -42394,8 +42397,8 @@ MonoBehaviour:
   currentMovePoints: 0
   currentCell: {x: 0, y: 0, z: 0}
   spriteRenderer: {fileID: 155501372}
-  selectedSprite: {fileID: 0}
-  unselectedSprite: {fileID: 0}
+  selectedSprite: {fileID: -56614617, guid: 4546f2470b8c58d41b87e33463fe81d2, type: 3}
+  unselectedSprite: {fileID: -715458784, guid: fa4e27f50f2f0104ba064160179a33e2, type: 3}
 --- !u!1 &841293691 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4038884030255061676, guid: dce758c78fa1d054484bb5c2cc086ce3, type: 3}
@@ -42644,10 +42647,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DiceHolderPlayer
       objectReference: {fileID: 0}
-    - target: {fileID: 2689170059380430271, guid: 72bdccb30762cbc48b1eb8f36ee9c61e, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 7100862370943676058, guid: 72bdccb30762cbc48b1eb8f36ee9c61e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 131903815}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72bdccb30762cbc48b1eb8f36ee9c61e, type: 3}
 --- !u!1 &1617673741
@@ -42700,8 +42703,8 @@ MonoBehaviour:
   currentMovePoints: 0
   currentCell: {x: 0, y: 0, z: 0}
   spriteRenderer: {fileID: 679317103}
-  selectedSprite: {fileID: 0}
-  unselectedSprite: {fileID: 0}
+  selectedSprite: {fileID: 223178631, guid: 4546f2470b8c58d41b87e33463fe81d2, type: 3}
+  unselectedSprite: {fileID: -279762772, guid: fa4e27f50f2f0104ba064160179a33e2, type: 3}
 --- !u!114 &1966248625 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7358621564098135229, guid: 98a8eaa71c21bce42abb7fc28d9314e7, type: 3}
