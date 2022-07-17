@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EntityController : MonoBehaviour
 {
     [SerializeField] private bool selected;
 
     [SerializeField] private CharacterStats stats;
+    [SerializeField] private GameObject hpBar;
 
     public int currentMovePoints;
     public int currentHealthPoints;
@@ -19,6 +21,8 @@ public class EntityController : MonoBehaviour
     private void Awake()
     {
         ResetHealthPoints();
+        hpBar.GetComponent<Slider>().maxValue = stats.healthPoints;
+        hpBar.GetComponent<Slider>().value = stats.healthPoints;
         ResetMovePoints();
         Release();
     }
@@ -34,14 +38,23 @@ public class EntityController : MonoBehaviour
     }
     public void ResetHealthPoints()
     {
+        hpBar.GetComponent<Slider>().value = stats.healthPoints;
         currentHealthPoints = stats.healthPoints;
     }
     
     public void DecreaseHealth(int healthToDecrease)
     {
         currentHealthPoints -= healthToDecrease;
+        hpBar.GetComponent<Slider>().value = currentHealthPoints;
+        checkIfDead(currentHealthPoints);
     }
 
+    public void checkIfDead(int hp) 
+    {
+        if (hp <= 0) { //Really dead
+            this.gameObject.SetActive(false);            
+        }
+    }
     public bool GetSelected()
     {
         return selected;
