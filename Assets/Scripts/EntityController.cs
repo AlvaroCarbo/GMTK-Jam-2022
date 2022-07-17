@@ -8,6 +8,7 @@ public class EntityController : MonoBehaviour
     [SerializeField] private CharacterStats stats;
 
     public int currentMovePoints;
+    public int currentHealthPoints;
 
     [SerializeField] private Vector3Int currentCell;
 
@@ -17,6 +18,7 @@ public class EntityController : MonoBehaviour
 
     private void Awake()
     {
+        ResetHealthPoints();
         ResetMovePoints();
         Release();
     }
@@ -29,6 +31,15 @@ public class EntityController : MonoBehaviour
     public void ResetMovePoints()
     {
         currentMovePoints = stats.movePoints;
+    }
+    public void ResetHealthPoints()
+    {
+        currentHealthPoints = stats.healthPoints;
+    }
+    
+    public void DecreaseHealth(int healthToDecrease)
+    {
+        currentHealthPoints -= healthToDecrease;
     }
 
     public bool GetSelected()

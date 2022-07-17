@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Character_hero
   m_EditorClassIdentifier: 
   movePoints: 6
+  healthPoints: 10

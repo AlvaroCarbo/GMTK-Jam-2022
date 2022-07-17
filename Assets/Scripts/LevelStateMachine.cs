@@ -4,7 +4,8 @@ using UnityEngine;
 using TMPro;
 
 public class LevelStateMachine : MonoBehaviour
-{
+{ 
+    public static LevelStateMachine Instance;
     public int actualTurn;
     public GameObject player, enemy;
     public TextMeshProUGUI turnText, turnTextBG, dmgPlayerText, dmgEnemyText;
@@ -15,6 +16,8 @@ public class LevelStateMachine : MonoBehaviour
     public bool isPlayerTurn = true, canFinishTurn;
     public int totalAttack;
     public GameState State = GameState.PlayerMoveTurn;
+
+    public EntityController enemySelected;
 
     public enum GameState {
         PlayerMoveTurn,
@@ -29,6 +32,15 @@ public class LevelStateMachine : MonoBehaviour
     }
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
         actualTurn = 1;
         canFinishTurn = true;
         isPlayerTurn = true;
@@ -38,12 +50,12 @@ public class LevelStateMachine : MonoBehaviour
     {
         if (isPlayerTurn)
         {
+            enemySelected.DecreaseHealth(totalAttack);
             DisableAttackGUI();
             player.GetComponentInChildren<Animator>().SetTrigger("Attack");
         }
         else 
         {
-            
             enemy.GetComponentInChildren<Animator>().SetTrigger("Attack");
             FinishTurn();
         }

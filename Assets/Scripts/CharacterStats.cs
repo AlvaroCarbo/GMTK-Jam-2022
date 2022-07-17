@@ -4,4 +4,5 @@ using UnityEngine;
 public class CharacterStats : ScriptableObject
 {
     public int movePoints;
+    public int healthPoints;
 }

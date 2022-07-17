@@ -189,7 +189,11 @@ public class TileSelector : MonoBehaviour
             player.SetWorldPosition(walkableTilemap.CellToWorld(cellToGo));
             player.SetCell(cellToGo);
 
-            // Attack to enemy
+            if (LevelStateMachine.Instance != null)
+            {
+                LevelStateMachine.Instance.State = LevelStateMachine.GameState.ChangePlayerMoveToAttackTurn;
+                LevelStateMachine.Instance.enemySelected = enemies.First(enemy => enemy.GetCell() == target);
+            }
         }
     }
 
