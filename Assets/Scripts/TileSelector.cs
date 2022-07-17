@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
@@ -9,24 +10,37 @@ public class TileSelector : MonoBehaviour
 {
     public static TileSelector Instance;
 
+    [Header("Tilemaps")]
     [SerializeField] private Tilemap walkableTilemap;
     [SerializeField] private Tilemap selectionTilemap;
     [SerializeField] private Tilemap stepsTilemap;
 
+    [Header("Tiles")]
     [SerializeField] private TileBase selectedTile;
     [SerializeField] private TileBase walkableSelectedTile;
     [SerializeField] private TileBase walkableTile;
     [SerializeField] private TileBase occupiedTile;
 
+    [Header("Grid selected coordinates")]
     [SerializeField] private Vector3Int selectedTilePosition;
     [SerializeField] private Vector3Int lastSelectedTile;
 
-    [SerializeField] private EntityController player;
+    [Header("Grid player walkable coordinates")]
     [SerializeField] private List<Vector3> playerMovePosition;
+    
+    [Header("Entities")]
+    [SerializeField] private EntityController player;
     [SerializeField] private List<EntityController> enemies;
 
+    [Header("Helper")]
     [SerializeField] private GameObject mouseOver;
+    [SerializeField] private TMP_Text mouseOverText;
+    // [SerializeField] private GameObject selected;
+    
+    [Header("Inputs")]
     [SerializeField] private InputHandler inputHandler;
+    
+    [Header("Camera")]
     private Camera _camera;
 
     private void Awake()
@@ -50,7 +64,7 @@ public class TileSelector : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<EntityController>();
         player.SetCell(walkableTilemap.WorldToCell(player.GetWorldPosition()));
-        
+
         var enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var enemy in enemyObjects)
         {
@@ -79,6 +93,23 @@ public class TileSelector : MonoBehaviour
             selectionTilemap.SetTile(selectedTilePosition,
                 stepsTilemap.HasTile(selectedTilePosition) ? walkableSelectedTile : selectedTile);
         }
+
+
+        if (player.GetCell() == selectedTilePosition)
+        {
+            mouseOver = player.gameObject;
+        }
+        else if (enemies.Any(enemy => enemy.GetCell() == selectedTilePosition))
+        {
+            mouseOver = enemies.First(enemy => enemy.GetCell() == selectedTilePosition).gameObject;
+        }
+        else
+        {
+            mouseOver = null;
+        }
+        
+        // Helper
+        mouseOverText.text = mouseOver == null ? "" : mouseOver.name;
     }
 
     private void SelectTile()
@@ -87,7 +118,7 @@ public class TileSelector : MonoBehaviour
         // Vector2 playerPosition = walkableTilemap.GetCellCenterWorld(gridPosition);
         var playerPosition = new Vector2(gridPosition.x, gridPosition.y);
         var tempSelected = new Vector2Int(selectedTilePosition.x, selectedTilePosition.y);
-        
+
         if (playerPosition == tempSelected)
         {
             player.Select();
@@ -131,7 +162,7 @@ public class TileSelector : MonoBehaviour
                     stepsTilemap.SetTile(tilePosition, walkableTile);
                     playerMovePosition.Add(tilePosition);
                 }
-                
+
                 if (enemies.Any(enemy => enemy.GetCell() == tilePosition))
                 {
                     stepsTilemap.SetTile(tilePosition, occupiedTile);
