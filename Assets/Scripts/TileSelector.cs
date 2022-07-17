@@ -54,13 +54,7 @@ public class TileSelector : MonoBehaviour
         }
 
         _camera = Camera.main;
-    }
-
-    private void Start()
-    {
-        inputHandler.OnMoveEvent += GetTilePosition;
-        inputHandler.OnClickEvent += SelectTile;
-
+        
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<EntityController>();
         player.SetCell(walkableTilemap.WorldToCell(player.GetWorldPosition()));
 
@@ -74,6 +68,12 @@ public class TileSelector : MonoBehaviour
         {
             enemy.SetCell(walkableTilemap.WorldToCell(enemy.GetWorldPosition()));
         }
+    }
+
+    private void Start()
+    {
+        inputHandler.OnMoveEvent += GetTilePosition;
+        inputHandler.OnClickEvent += SelectTile;
     }
 
     private void GetTilePosition(Vector2 pos)

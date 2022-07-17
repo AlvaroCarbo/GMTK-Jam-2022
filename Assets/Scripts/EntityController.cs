@@ -15,15 +15,20 @@ public class EntityController : MonoBehaviour
     [SerializeField] private Sprite selectedSprite;
     [SerializeField] private Sprite unselectedSprite;
 
-    private void Start()
+    private void Awake()
     {
-        currentMovePoints = stats.movePoints;
+        ResetMovePoints();
         Release();
     }
 
     public CharacterStats GetStats()
     {
         return stats;
+    }
+    
+    public void ResetMovePoints()
+    {
+        currentMovePoints = stats.movePoints;
     }
 
     public bool GetSelected()
@@ -34,20 +39,17 @@ public class EntityController : MonoBehaviour
     public void Select()
     {
         selected = true;
-        // spriteRenderer.sprite = selectedSprite;
     }
 
     public void Release()
     {
         selected = false;
-        // spriteRenderer.sprite = unselectedSprite;
     }
 
     public void SetWorldPosition(Vector3 worldPos)
     {
         worldPos.z = 1;
         transform.position = worldPos;
-        // Debug.Log("Setting pos to:" + position);
     }
 
     public void SetCell(Vector3Int cell)
