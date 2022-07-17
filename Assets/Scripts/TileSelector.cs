@@ -16,13 +16,16 @@ public class TileSelector : MonoBehaviour
     [SerializeField] private TileBase selectedTile;
     [SerializeField] private TileBase walkableSelectedTile;
     [SerializeField] private TileBase walkableTile;
+    [SerializeField] private TileBase occupiedTile;
 
     [SerializeField] private Vector3Int selectedTilePosition;
     [SerializeField] private Vector3Int lastSelectedTile;
 
     [SerializeField] private EntityController player;
     [SerializeField] private List<Vector3> playerMovePosition;
+    [SerializeField] private List<EntityController> enemies;
 
+    [SerializeField] private GameObject mouseOver;
     [SerializeField] private InputHandler inputHandler;
     private Camera _camera;
 
@@ -45,10 +48,19 @@ public class TileSelector : MonoBehaviour
         inputHandler.OnMoveEvent += GetTilePosition;
         inputHandler.OnClickEvent += SelectTile;
 
-        // Debug.Log(walkableTilemap.cellBounds);
-        // Debug.Log(walkableTilemap.cellBounds.size);
-        
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<EntityController>();
         player.SetCell(walkableTilemap.WorldToCell(player.GetWorldPosition()));
+        
+        var enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemyObjects)
+        {
+            enemies.Add(enemy.GetComponent<EntityController>());
+        }
+
+        foreach (var enemy in enemies)
+        {
+            enemy.SetCell(walkableTilemap.WorldToCell(enemy.GetWorldPosition()));
+        }
     }
 
     private void GetTilePosition(Vector2 pos)
@@ -118,6 +130,12 @@ public class TileSelector : MonoBehaviour
                 {
                     stepsTilemap.SetTile(tilePosition, walkableTile);
                     playerMovePosition.Add(tilePosition);
+                }
+                
+                if (enemies.Any(enemy => enemy.GetCell() == tilePosition))
+                {
+                    stepsTilemap.SetTile(tilePosition, occupiedTile);
+                    playerMovePosition.Remove(tilePosition);
                 }
             }
         }
