@@ -19,7 +19,11 @@ public class EntityController : MonoBehaviour
     public void Select() => selected = true;
     
     public void Release() => selected = false;
-
+    public void SetPosition(Vector3 position) {
+        position.z = 1;
+        this.transform.position = position;
+        Debug.Log("Setting pos to:" + position);
+    }
     public Vector3 GetPosition()
     {
         return transform.position;

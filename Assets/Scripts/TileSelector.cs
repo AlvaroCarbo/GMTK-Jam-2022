@@ -72,8 +72,7 @@ public class TileSelector : MonoBehaviour
         // Vector2 playerPosition = walkableTilemap.GetCellCenterWorld(gridPosition);
         Vector2 playerPosition = new Vector2(gridPosition.x, gridPosition.y);
         var tempSelected = new Vector2Int(selectedTilePosition.x, selectedTilePosition.y);
-        //Check if player is already selected and try to move there
-        if (player.GetSelected() && playerPosition != tempSelected) { /*player.gameObject.GetComponent<Transform>().position = tempSelected;*/ }
+        
         Debug.Log(playerPosition);
         Debug.Log(tempSelected);
         if (playerPosition == tempSelected)
@@ -83,11 +82,18 @@ public class TileSelector : MonoBehaviour
         }
         else
         {
+            //Check if player is already selected and try to move there 
+            //TO-DO: Evitar ir más lejos del rango
+            if (player.GetSelected() && playerPosition != tempSelected) { var target = tempSelected; MoveToPoint(new Vector3Int(target.x, target.y)); }
             DisableTileRadius();
             player.Release();
         }
     }
 
+    private void MoveToPoint(Vector3Int target)
+    {
+        player.SetPosition(walkableTilemap.CellToWorld(target));
+    }
     private void ShowTileRadius(int tileSteps)
     {
         // check for tiles around where there number between tiles and the distance to the selected tile is less than the number of tiles

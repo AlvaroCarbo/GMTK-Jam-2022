@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80dc2d8818ca48d88b0505b7da59c091, type: 3}
   m_Name: Character_hero
   m_EditorClassIdentifier: 
-  movePoints: 3
+  movePoints: 6
