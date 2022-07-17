@@ -33,11 +33,12 @@ public class PathfinderTest : MonoBehaviour
     {
         _enemy = GetComponent<EntityController>();
         
-        enemies = GameObject.FindGameObjectsWithTag("Enemy").ToList().Select(e => e.GetComponent<EntityController>()).ToList();
     }
     
     private void Start()
     {
+        enemies = GameObject.FindGameObjectsWithTag("Enemy").Select(e => e.GetComponent<EntityController>()).Where(e => e != _enemy).ToList();
+
         ShowEnemyTileRadius(_enemy.currentMovePoints);
         
         MoveToPoint(player.GetCell());
@@ -55,16 +56,19 @@ public class PathfinderTest : MonoBehaviour
                 Vector3Int tilePosition = new Vector3Int(_enemy.GetCell().x + x, _enemy.GetCell().y + y, 0);
                 if (walkableTilemap.HasTile(tilePosition))
                 {
-                    
-                    // stepsTilemap.SetTile(tilePosition, enemyWalkableTile);
                     enemyMovement.Add(tilePosition);
                 }
 
                 if (player.GetCell() == tilePosition)
                 {
-                    // stepsTilemap.SetTile(tilePosition, occupiedTile);
                     enemyMovement.Remove(tilePosition);
                     playerInMovePosition.Add(tilePosition);
+                }
+                
+                if (enemies.Any(e => e.GetCell() == tilePosition))
+                {
+                    enemyMovement.Remove(tilePosition);
+                    enemiesInMovePosition.Add(tilePosition);
                 }
             }
         }
@@ -79,7 +83,7 @@ public class PathfinderTest : MonoBehaviour
             _enemy.SetCell(target);
         }
 
-        if (playerInMovePosition.Any(enemyPos => enemyPos == target))
+        if (playerInMovePosition.Any(playerPos => playerPos == target))
         {
             var targetPos = new Vector2(target.x, target.y);
             var nearestPlayerMovePosition = enemyMovement.OrderBy(pos => Vector2.Distance(pos, targetPos)).First();
@@ -88,8 +92,8 @@ public class PathfinderTest : MonoBehaviour
             _enemy.WalkedCellDistance(cellToGo);
             _enemy.SetWorldPosition(walkableTilemap.CellToWorld(cellToGo));
             _enemy.SetCell(cellToGo);
-
             // Attack to enemy
         }
+        
     }
 }
