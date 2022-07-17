@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 public class LevelStateMachine : MonoBehaviour
-{ 
+{
     public static LevelStateMachine Instance;
     public int actualTurn;
     public GameObject player, enemy;
@@ -15,11 +15,13 @@ public class LevelStateMachine : MonoBehaviour
     public SpriteRenderer[] spriteRendererDices;
     public bool isPlayerTurn = true, canFinishTurn;
     public int totalAttack;
+    public bool canPlayerAttack;
     public GameState State = GameState.PlayerMoveTurn;
 
     public EntityController enemySelected;
 
-    public enum GameState {
+    public enum GameState
+    {
         PlayerMoveTurn,
         ChangePlayerMoveToAttackTurn,
         PlayerAttackTurn,
@@ -30,6 +32,7 @@ public class LevelStateMachine : MonoBehaviour
         ChangeEnemyTurnToPlayerTurn,
         LevelFinished
     }
+
     private void Awake()
     {
         if (Instance == null)
@@ -40,13 +43,13 @@ public class LevelStateMachine : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         actualTurn = 1;
         canFinishTurn = true;
         isPlayerTurn = true;
     }
 
-    public void OnAttackMade() 
+    public void OnAttackMade()
     {
         if (isPlayerTurn)
         {
@@ -54,22 +57,23 @@ public class LevelStateMachine : MonoBehaviour
             DisableAttackGUI();
             player.GetComponentInChildren<Animator>().SetTrigger("Attack");
         }
-        else 
+        else
         {
             enemy.GetComponentInChildren<Animator>().SetTrigger("Attack");
             FinishTurn();
         }
     }
-    public void AddAttackToStack(int value) 
+
+    public void AddAttackToStack(int value)
     {
         totalAttack += value;
         if (isPlayerTurn)
         {
-            dmgPlayerText.text = "Your Attack: " + totalAttack; 
+            dmgPlayerText.text = "Your Attack: " + totalAttack;
         }
-        else 
+        else
         {
-            dmgEnemyText.text = "Enemy Attack: " + totalAttack/2;
+            dmgEnemyText.text = "Enemy Attack: " + totalAttack / 2;
         }
     }
 
@@ -83,17 +87,14 @@ public class LevelStateMachine : MonoBehaviour
         if (isPlayerTurn)
         {
             diceHolderPlayer.SetActive(true);
-           
         }
-        else 
+        else
         {
             diceHolderEnemy.SetActive(true);
         }
     }
 
-   
-
-    public void DisableAttackGUI() 
+    public void DisableAttackGUI()
     {
         if (isPlayerTurn)
         {
@@ -103,7 +104,11 @@ public class LevelStateMachine : MonoBehaviour
             totalAttack = 0;
             for (int i = 0; i < spriteRendererDices.Length; i++)
             {
-                if (dicesOnUse.Length != 0) { dicesOnUse[i].ableToRoll = true; }
+                if (dicesOnUse.Length != 0)
+                {
+                    dicesOnUse[i].ableToRoll = true;
+                }
+
                 spriteRendererDices[i].sprite = spriteDefaultDice;
             }
         }
@@ -115,25 +120,39 @@ public class LevelStateMachine : MonoBehaviour
             totalAttack = 0;
             for (int i = 0; i < spriteRendererDices.Length; i++)
             {
-                if (dicesOnUse.Length != 0) { dicesOnUse[i].ableToRoll = true; }
+                if (dicesOnUse.Length != 0)
+                {
+                    dicesOnUse[i].ableToRoll = true;
+                }
+
                 spriteRendererDices[i].sprite = spriteDefaultDice;
             }
         }
     }
+
     public void FindDices()
     {
-        if (isPlayerTurn) { dicesOnUse = diceHolderPlayer.FindComponentsInChildrenWithTag<DiceRoller>("Dice"); }
-        else { dicesOnUse = diceHolderEnemy.FindComponentsInChildrenWithTag<DiceRoller>("Dice"); }
+        if (isPlayerTurn)
+        {
+            dicesOnUse = diceHolderPlayer.FindComponentsInChildrenWithTag<DiceRoller>("Dice");
+        }
+        else
+        {
+            dicesOnUse = diceHolderEnemy.FindComponentsInChildrenWithTag<DiceRoller>("Dice");
+        }
     }
-    public void EnemyDiceRoll() 
+
+    public void EnemyDiceRoll()
     {
         for (int i = 0; i < dicesOnUse.Length; i++)
         {
             dicesOnUse[i].onRollClicked();
         }
+
         StartCoroutine(CountEnemyDmg());
     }
-    public IEnumerator CountEnemyDmg() 
+
+    public IEnumerator CountEnemyDmg()
     {
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < dicesOnUse.Length; i++)
@@ -144,64 +163,83 @@ public class LevelStateMachine : MonoBehaviour
                 dicesOnUse[i].hasRolled = false;
             }
         }
+
         //Need stop doing that once done
         OnAttackMade();
     }
-    public void FinishTurn() 
+
+    public void FinishTurn()
     {
         if (!canFinishTurn && !isPlayerTurn) return;
-        if (isPlayerTurn) { State = GameState.EnemyMoveTurn; DisableAttackGUI(); canFinishTurn = false; }
-        else { State = GameState.PlayerMoveTurn; DisableAttackGUI(); actualTurn++; turnText.text = "TURN " + actualTurn; turnTextBG.text = "TURN " + actualTurn; }
+        if (isPlayerTurn)
+        {
+            State = GameState.EnemyMoveTurn;
+            DisableAttackGUI();
+            canFinishTurn = false;
+        }
+        else
+        {
+            State = GameState.PlayerMoveTurn;
+            DisableAttackGUI();
+            actualTurn++;
+            turnText.text = "TURN " + actualTurn;
+            turnTextBG.text = "TURN " + actualTurn;
+        }
+
         isPlayerTurn = !isPlayerTurn;
-        
     }
+
     public void PlayerDiceRoll()
     {
-        for (int i = 0; i < dicesOnUse.Length; i++) {
-            if (dicesOnUse[i].value != 0 && dicesOnUse[i].hasRolled) {
+        for (int i = 0; i < dicesOnUse.Length; i++)
+        {
+            if (dicesOnUse[i].value != 0 && dicesOnUse[i].hasRolled)
+            {
                 AddAttackToStack(dicesOnUse[i].value);
                 dicesOnUse[i].hasRolled = false;
             }
         }
     }
 
-    public void PlayerTurnMove() 
+    public void PlayerTurnMove()
     {
         canFinishTurn = true;
     }
 
-    public void EnemyTurnMove() 
+    public void EnemyTurnMove()
     {
         //If near enough player will try to fight him, if not then moves to random place and pass turn
-
-
     }
-    public void FinishLevel() 
-    { 
-    
+
+    public void FinishLevel()
+    {
     }
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch (State) 
+        switch (State)
         {
             case GameState.PlayerMoveTurn:
                 PlayerTurnMove();
                 break;
             case GameState.ChangePlayerMoveToAttackTurn:
+                canPlayerAttack = true;
                 EnableAttackGUI();
                 FindDices();
                 State = GameState.PlayerAttackTurn;
                 break;
             case GameState.PlayerAttackTurn:
-                PlayerDiceRoll();
+                if (canPlayerAttack)
+                {
+                    PlayerDiceRoll();
+                    canPlayerAttack = false;
+                }
                 break;
             case GameState.ChangePlayerTurnToEnemyTurn:
                 FinishTurn();
@@ -224,7 +262,6 @@ public class LevelStateMachine : MonoBehaviour
                 //Player dead or finished Level
                 FinishLevel();
                 break;
-
         }
     }
 }

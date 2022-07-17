@@ -54,7 +54,7 @@ public class TileSelector : MonoBehaviour
         }
 
         _camera = Camera.main;
-        
+
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<EntityController>();
         player.SetCell(walkableTilemap.WorldToCell(player.GetWorldPosition()));
 
@@ -191,8 +191,12 @@ public class TileSelector : MonoBehaviour
 
             if (LevelStateMachine.Instance != null)
             {
-                LevelStateMachine.Instance.State = LevelStateMachine.GameState.ChangePlayerMoveToAttackTurn;
-                LevelStateMachine.Instance.enemySelected = enemies.First(enemy => enemy.GetCell() == target);
+                if (LevelStateMachine.Instance.State == LevelStateMachine.GameState.PlayerMoveTurn)
+                {
+                    LevelStateMachine.Instance.State = LevelStateMachine.GameState.ChangePlayerMoveToAttackTurn;
+
+                    LevelStateMachine.Instance.enemySelected = enemies.First(enemy => enemy.GetCell() == target);
+                }
             }
         }
     }
