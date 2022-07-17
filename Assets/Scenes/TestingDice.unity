@@ -290,6 +290,7 @@ MonoBehaviour:
   canFinishTurn: 0
   totalAttack: 0
   State: 0
+  enemySelected: {fileID: 0}
 --- !u!1 &178718846
 GameObject:
   m_ObjectHideFlags: 0
@@ -42384,6 +42385,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1152476645 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5168090660408013878, guid: 04805c15c43a05e42814792ded107b1a, type: 3}
+  m_PrefabInstance: {fileID: 7910999904873515137}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1198417788
 GameObject:
   m_ObjectHideFlags: 0
@@ -42632,6 +42638,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1617673742}
   - component: {fileID: 1617673743}
+  - component: {fileID: 1617673744}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -42670,11 +42677,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selected: 0
   stats: {fileID: 11400000, guid: 2ffc06f144e0d2049b38918841e67de8, type: 2}
+  hpBar: {fileID: 1779824033}
   currentMovePoints: 0
+  currentHealthPoints: 0
   currentCell: {x: 0, y: 0, z: 0}
   spriteRenderer: {fileID: 679317103}
   selectedSprite: {fileID: 223178631, guid: 4546f2470b8c58d41b87e33463fe81d2, type: 3}
   unselectedSprite: {fileID: -279762772, guid: fa4e27f50f2f0104ba064160179a33e2, type: 3}
+--- !u!114 &1617673744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617673741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c176e2dadac0b4a408854452b6fde028, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 835317723}
+  enemies: []
+  walkableTilemap: {fileID: 178718849}
+  enemyMovement: []
+  playerInMovePosition: []
+  enemiesInMovePosition: []
+--- !u!1 &1779824033 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8722875844076998790, guid: 07ed7b8032cf37f41a34561ceedcaf30, type: 3}
+  m_PrefabInstance: {fileID: 697922628}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1966248625 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7358621564098135229, guid: 98a8eaa71c21bce42abb7fc28d9314e7, type: 3}
@@ -42927,10 +42959,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7102269493705891737, guid: 04805c15c43a05e42814792ded107b1a, type: 3}
+      propertyPath: m_WholeNumbers
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7910999905708762968, guid: 04805c15c43a05e42814792ded107b1a, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7910999905708762970, guid: 04805c15c43a05e42814792ded107b1a, type: 3}
+      propertyPath: hpBar
+      value: 
+      objectReference: {fileID: 1152476645}
     - target: {fileID: 7910999905708762971, guid: 04805c15c43a05e42814792ded107b1a, type: 3}
       propertyPath: m_RootOrder
       value: 2
