@@ -15,7 +15,6 @@ public class LevelStateMachine : MonoBehaviour
     public SpriteRenderer[] spriteRendererDices;
     public bool isPlayerTurn = true, canFinishTurn;
     public int totalAttack;
-    public bool canPlayerAttack;
     public GameState State = GameState.PlayerMoveTurn;
 
     public EntityController enemySelected;
@@ -229,17 +228,12 @@ public class LevelStateMachine : MonoBehaviour
                 PlayerTurnMove();
                 break;
             case GameState.ChangePlayerMoveToAttackTurn:
-                canPlayerAttack = true;
                 EnableAttackGUI();
                 FindDices();
                 State = GameState.PlayerAttackTurn;
                 break;
             case GameState.PlayerAttackTurn:
-                if (canPlayerAttack)
-                {
-                    PlayerDiceRoll();
-                    canPlayerAttack = false;
-                }
+                PlayerDiceRoll();
                 break;
             case GameState.ChangePlayerTurnToEnemyTurn:
                 FinishTurn();
