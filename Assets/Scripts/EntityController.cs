@@ -10,7 +10,7 @@ public class EntityController : MonoBehaviour
     public int currentMovePoints;
 
     [SerializeField] private Vector3Int currentCell;
-    
+
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite selectedSprite;
     [SerializeField] private Sprite unselectedSprite;
@@ -33,15 +33,15 @@ public class EntityController : MonoBehaviour
 
     public void Select()
     {
-        selected = true;  
+        selected = true;
         // spriteRenderer.sprite = selectedSprite;
     }
 
     public void Release()
     {
-        selected = false;  
+        selected = false;
         // spriteRenderer.sprite = unselectedSprite;
-    } 
+    }
 
     public void SetWorldPosition(Vector3 worldPos)
     {
@@ -69,5 +69,18 @@ public class EntityController : MonoBehaviour
     {
         var distance = Mathf.CeilToInt(Vector3Int.Distance(currentCell, target));
         currentMovePoints -= distance;
+    }
+
+    public void Hover()
+    {
+        spriteRenderer.sprite = selectedSprite;
+    }
+
+    public void ResetHover()
+    {
+        if (!selected)
+        {
+            spriteRenderer.sprite = unselectedSprite;
+        }
     }
 }
