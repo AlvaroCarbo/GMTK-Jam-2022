@@ -27,6 +27,8 @@ public class TileSelector : MonoBehaviour
 
     [Header("Grid player walkable coordinates")]
     [SerializeField] private List<Vector3> playerMovePosition;
+    [Header("Enemy entities in player walkable coordinates")]
+    [SerializeField] private List<Vector3> enemiesInMovePosition;
     
     [Header("Entities")]
     [SerializeField] private EntityController player;
@@ -167,6 +169,7 @@ public class TileSelector : MonoBehaviour
                 {
                     stepsTilemap.SetTile(tilePosition, occupiedTile);
                     playerMovePosition.Remove(tilePosition);
+                    enemiesInMovePosition.Add(tilePosition);
                 }
             }
         }
@@ -176,6 +179,7 @@ public class TileSelector : MonoBehaviour
     {
         stepsTilemap.ClearAllTiles();
         playerMovePosition.Clear();
+        enemiesInMovePosition.Clear();
     }
 
     private void OnDestroy()
