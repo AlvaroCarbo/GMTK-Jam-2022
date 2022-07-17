@@ -3494,7 +3494,7 @@ TextureImporter:
         height: 8
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 5, y: 1, z: 5, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -4349,21 +4349,20 @@ TextureImporter:
       GUI_2x_sliced_121: 1681344284
       GUI_2x_sliced_130: 936587555
       GUI_2x_sliced_33: -1220422397
-      GUI_2x_sliced_189: 463888545
       GUI_2x_sliced_90: -492638295
       GUI_2x_sliced_125: -2077324650
-      GUI_2x_sliced_148: 1640636200
       GUI_2x_sliced_99: -563512105
+      GUI_2x_sliced_68: 2073174610
       GUI_2x_sliced_117: 874694204
       GUI_2x_sliced_50: -1007291770
       GUI_2x_sliced_120: -709199402
       GUI_2x_sliced_165: -588252193
       GUI_2x_sliced_154: 1214470239
-      GUI_2x_sliced_68: 2073174610
       GUI_2x_sliced_98: 2109412155
       GUI_2x_sliced_147: 309946949
       GUI_2x_sliced_134: -1456075718
       GUI_2x_sliced_193: -694219585
+      GUI_2x_sliced_148: 1640636200
       GUI_2x_sliced_67: -1196917076
       GUI_2x_sliced_78: 1864277547
       GUI_2x_sliced_17: 771648388
@@ -4378,6 +4377,7 @@ TextureImporter:
       GUI_2x_sliced_118: -1480738911
       GUI_2x_sliced_82: 242774703
       GUI_2x_sliced_96: -1909576621
+      GUI_2x_sliced_189: 463888545
       GUI_2x_sliced_196: 931054697
       GUI_2x_sliced_156: -2051586035
       GUI_2x_sliced_22: 1877571645
